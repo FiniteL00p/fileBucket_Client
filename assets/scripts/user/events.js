@@ -1,6 +1,7 @@
 const getFormFields = require('../../../lib/get-form-fields')
 const api = require('./api')
 const ui = require('./ui')
+const store = require('../store.js')
 
 // const authHandlers = function () {
 //   $('#login').on('submit', onSignIn)
@@ -24,8 +25,8 @@ const onSignIn = function (event) {
   const data = getFormFields(event.target)
   console.log(data)
   api.signIn(data)
-  .then(ui.onSignInSuccess)
-  .catch(ui.onSignInFailure)
+    .then(ui.onSignInSuccess)
+    .catch(ui.onSignInFailure)
 }
 
 const onSignUp = (event) => {
@@ -40,22 +41,38 @@ const onSignUp = (event) => {
 const onLogOut = (event) => {
   event.preventDefault()
   console.log('Log Out button works!')
+  console.log(store.user.token)
+  api.logOut()
+    .then(ui.onLogOutSuccess)
+    .catch(ui.onLogOutFailure)
+}
+
+const onToggleEditPwdModal = (event) => {
+  event.preventDefault()
+  $('#change-pw-modal').modal('show')
 }
 
 const onEditPassword = (event) => {
   event.preventDefault()
-  console.log('Edit Password button works!')
-  $('#change-pw-modal').modal('show')
+  const packagedEditPwdData = getFormFields(event.target)
+  api.changePassword(packagedEditPwdData)
+    .then(ui.onChangePwdSuccess)
+    .catch(ui.onChangePwdFailure)
 }
 
-const onUploadImage = (event) => {
+const onSelectUploadImagesView = (event) => {
   event.preventDefault()
-  console.log('Upload Image button works!')
+  ui.uploadImagesView()
 }
 
-const onViewMyImages = (event) => {
+const onSelectViewMyImagesView = (event) => {
   event.preventDefault()
-  console.log('My Images button works!')
+  ui.myImagesView()
+}
+
+const onReturnToCarouselView = (event) => {
+  event.preventDefault()
+  ui.returnToCarouselView()
 }
 
 module.exports = {
@@ -64,7 +81,9 @@ module.exports = {
   onToggleSignIn,
   onSignUp,
   onLogOut,
+  onToggleEditPwdModal,
+  onSelectUploadImagesView,
+  onSelectViewMyImagesView,
   onEditPassword,
-  onUploadImage,
-  onViewMyImages
+  onReturnToCarouselView
 }

@@ -1,8 +1,9 @@
 $icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/';
 
 @import '~bootstrap-sass/assets/stylesheets/bootstrap';
-@import "colors";
-@import "variables";
+@import 'colors';
+@import 'variables';
+@import '../../jquery-toast-plugin/src/jquery.toast.css';
 
 // ---------------Global - Start---------------
 body {
@@ -106,8 +107,49 @@ body {
 }
 // ---------------Landing Page - End---------------
 
-// ---------------Carousel Page - Start---------------
+// ------------Static Nav - Start ---------------
 
+.navbar-brand {
+  font-family: 'Bungee Outline', cursive;
+  font-size: 3em;
+  color: black;
+}
+
+#user-email-dropdown {
+  color: black;
+}
+// ------------Static Nav - End ---------------
+
+// ---------------Carousel Page - Start---------------
+.carousel-control {
+  width: 0;
+}
+
+.left {
+  left: calc($carousel-image-width - 120px);
+}
+
+.right {
+  left: calc($carousel-image-width - 120px);
+}
+
+// .img-constrain {
+//   height: 300px;
+//   width: 300px;
+// }
+
+.img-constrain {
+  display: block;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  max-height: 570px;
+  max-width: $carousel-image-width;
+  width: auto;
+}
+// ---------------Carousel Page - End---------------
+
+// ------------Modals - Start ---------------
 // Change password modal - Start
 .change-pw-modal-content {
   width: 500px;
@@ -138,7 +180,14 @@ body {
   top: 13px;
   left: 4px;
 }
+// Change password modal - End
+// ------------Modals - End ---------------
 
+// ------------Upload Images Page - Start ---------------
+
+// ------------Upload Images End - End ---------------
+
+// ------------Media Queries - Start ---------------
 @media (max-width: 991px) {
   .change-pw-modal-content {
     left: 10%;
@@ -217,42 +266,4 @@ body {
     left: -10px;
   }
 }
-
-// Change password modal - End
-
-.carousel-nav {
-  color: black;
-}
-
-.navbar-brand {
-  font-family: 'Bungee Outline', cursive;
-  font-size: 3em;
-}
-
-.carousel-control {
-  width: 0;
-}
-
-.left {
-  left: calc($carousel-image-width - 120px);
-}
-
-.right {
-  left: calc($carousel-image-width - 120px);
-}
-
-// .img-constrain {
-//   height: 300px;
-//   width: 300px;
-// }
-
-.img-constrain {
-  display: block;
-  height: auto;
-  margin-left: auto;
-  margin-right: auto;
-  max-height: 570px;
-  max-width: $carousel-image-width;
-  width: auto;
-}
-// ---------------Carousel Page - End---------------
+// ------------Media Queries - End ---------------
