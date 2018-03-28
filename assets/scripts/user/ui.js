@@ -175,7 +175,7 @@ const myImagesView = (apiResponse) => {
   store.view = 'my images'
   // updating nav bar - END
   // populate images - START
-<<<<<<< HEAD
+
   // filtering API response for user-owned images
   const personalImagesArr = apiResponse.images.filter(function (image) {
     return image._owner.email === store.user.email
@@ -187,16 +187,6 @@ const myImagesView = (apiResponse) => {
   // pass modified array with string for tags ro handlebars
   const myImagesReadout = templateMyImages({ images: personalImagesArr })
   $('#my-images-readout-wrapper').append(myImagesReadout)
-  console.log(apiResponse.images)
-  console.log(store.user._id)
-=======
-  // ownership syntax (for eventual use; currently populating all)
-  // const personalImagesArr = apiResponse.images.filter(function (image) {
-  //   return image.user.email === store.user.email
-  // })
-  const myImagesReadout = templateMyImages({ images: apiResponse.images })
-  $('#my-images-page').append(myImagesReadout)
->>>>>>> Update image upload form
   // using jquery to add correct image to each handlebars element
   for (let i = 0; i < apiResponse.images.length; i++) {
     $("div[data-id='image-" + apiResponse.images[i]._id + "']").css('background-image', 'url(' + apiResponse.images[i].url + ')')
