@@ -12,7 +12,42 @@ body {
   font-family: 'Raleway', sans-serif;
 }
 
+.loader {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.loader p {
+  margin-top: 10px;
+}
+
+.loader-wrapper {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 200px;
+}
+
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.carousel {
+  display: none;
+}
+
 footer {
+  display: none;
   position: fixed;
   bottom: 0;
   height: 8%;
@@ -80,9 +115,33 @@ footer {
   width: 300px;
 }
 
+#sign-up {
+  display: none;
+}
+
+#upload-images-page {
+  display: none;
+}
+
+#my-images-page {
+  display: none;
+}
+
+#comment-template {
+  display: none;
+}
+
+#static-nav {
+  display: none;
+}
+
 form#login-form,
 form#sign-up-form {
   background-color: rgba(0, 0, 0, 0.5);
+}
+
+.carousel-view {
+  display: none;
 }
 
 .auth-input {

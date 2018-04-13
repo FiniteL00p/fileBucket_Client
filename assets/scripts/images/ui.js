@@ -1,6 +1,9 @@
 'use strict'
 
 const store = require('../store')
+const templateCarousel = require('../templates/carousel-readout.handlebars')
+const templateMyImages = require('../templates/my-images-readout.handlebars')
+const api = require('./api')
 
 let tagCounter = 0
 const addTag = function (event) {
@@ -32,83 +35,53 @@ const editImageFailure = () => {
 }
 
 const uploadImagesView = () => {
-  if (store.view === 'carousel') {
-    $('#carousel-view').hide()
-    $('#upload-images-page').show()
-    $('#upload-image-li a').text('Carousel')
-    $('#upload-image-li').prop('id', 'carousel-li')
-  }
-  if (store.view === 'my images') {
-    $('#my-images-page').hide()
-    $('#upload-images-page').show()
-    $('#upload-image-li a').text('My Images')
-    $('#upload-image-li').prop('id', 'my-images-li')
-  }
-  store.view = 'upload images'
+  $('#upload-images-page').show()
+  $('#carousel-view').hide()
 }
 
-const populateCarouselSuccess = (apiResponse) => {
-  // remove user-owned images from the apiRespose
-  const publicImagesArr = apiResponse.images.filter(function (image) {
-    return image._owner.email !== store.user.email
-    // return image._owner.email === store.user.email
-  })
-  // filter array by distance
-  const geoArr = publicImagesArr.filter(function (image) {
-    const imageLatitude = image.latitude.toString()
-    const imageLongitude = image.longitude.toString()
-    const userLatitude = store.user.latitude.toString()
-    const userLongitude = store.user.longitude.toString()
-    image.distance = geolib.getDistance(
-      {latitude: imageLatitude, longitude: imageLongitude},
-      {latitude: userLatitude, longitude: userLongitude})
-    return image.distance < 25000
-  })
-  if (geoArr.length === 0) {
-    // pass the public array to handlebars
-    // run first public image through this handlebars to set active status in carousel
-    notification.staticToast('info', 'Empty Community!', 'Looks like no one in your community has uploaded an image. For now, here\'s a look at images from around the world!', '#1F888F')
-    $('#carousel-header').text('Public Images')
-    const carouselReadoutFirstImage = templateCarouselFirstImage({ image: publicImagesArr[0] })
-    // remove first image from array
-    publicImagesArr.splice(0, 1)
-    // run subsequent public images through this handlebars so active status not set
-    const carouselReadout = templateCarousel({ images: publicImagesArr })
-    // append images to DOM
-    $('#carousel-inner').append(carouselReadoutFirstImage)
-    $('#carousel-inner').append(carouselReadout)
-  } else {
-    // pass the geoArr to handlebars
-    // run first public image through this handlebars to set active status in carousel
-    const carouselReadoutFirstImage = templateCarouselFirstImage({ image: geoArr[0] })
-    // remove first image from array
-    geoArr.splice(0, 1)
-    // run subsequent public images through this handlebars so active status not set
-    const carouselReadout = templateCarousel({ images: geoArr })
-    // append images to DOM
-    $('#carousel-inner').append(carouselReadoutFirstImage)
-    $('#carousel-inner').append(carouselReadout)
+const populateCarousel = function(data) {
+  const carouselReadout = templateCarousel({ images: data.images })
+  $('#carousel-inner').append(carouselReadout)
+  $('#carousel-inner').find('.item').first().addClass('active')
+}
+
+const populateCarouselSuccess = (data) => {
+  console.log(data)
+  $('#carousel-inner').empty()
+  $('.loader-wrapper').hide()
+  $('#my-images-page').hide()
+  console.log(store.user)
+  console.log(data.images.length)
+  if(data.images.length < 1) {
+    console.log('first if ran')
+    api.getImages()
+    .then((data) => {
+      if(data > 1) {
+        console.log('second if ran')
+        $('#carousel-example-generic').show()
+        populateCarousel(data)
+      }
+      else {
+        console.log('ran')
+        $('#carousel-view').append('Sorry No Images Uploaded Yet')
+      }
+    })
+  }
+  else {
+    $('#carousel-example-generic').show()
+    populateCarousel(data)
   }
 }
 
-const myImagesView = (apiResponse) => {
-  // updating nav bar - START
-  if (store.view === 'carousel') {
-    $('#carousel-view').hide()
-    $('#my-images-page').show()
-    $('#my-images-li a').text('Carousel')
-    $('#my-images-li').prop('id', 'carousel-li')
-  }
-  if (store.view === 'upload images') {
-    $('#upload-images-page').hide()
-    $('#my-images-page').show()
-    $('#my-images-li a').text('Upload Image')
-    $('#my-images-li').prop('id', 'upload-image-li')
-  }
-  store.view = 'my images'
+const onGetMyImagesSuccess = (response) => {
+  console.log(response);
+  $('#upload-images-page').hide()
+  $('#carousel-view').hide()
+  $('#my-images-page').show()
+  $('#my-images-readout-wrapper').empty()
   // populate images - START
   // filtering API response for user-owned images
-  const personalImagesArr = apiResponse.images.filter(function (image) {
+  const personalImagesArr = response.images.filter(function (image) {
     return image._owner.email === store.user.email
   })
   if (personalImagesArr.length === 0) {
@@ -122,27 +95,15 @@ const myImagesView = (apiResponse) => {
     const myImagesReadout = templateMyImages({ images: personalImagesArr })
     $('#my-images-readout-wrapper').append(myImagesReadout)
     // using jquery to add correct image to each handlebars element
-    for (let i = 0; i < apiResponse.images.length; i++) {
-      $("div[data-id='image-" + apiResponse.images[i]._id + "']").css('background-image', 'url(' + apiResponse.images[i].url + ')')
+    for (let i = 0; i < response.images.length; i++) {
+      $("div[data-id='image-" + response.images[i]._id + "']").css('background-image', 'url(' + response.images[i].url + ')')
     }
-    // populate images - END
   }
 }
 
 const returnToCarouselView = () => {
-  if (store.view === 'upload images') {
-    $('#upload-images-page').hide()
-    $('#carousel-view').show()
-    $('#carousel-li a').text('Upload Image')
-    $('#carousel-li').prop('id', 'upload-image-li')
-  }
-  if (store.view === 'my images') {
-    $('#my-images-page').hide()
-    $('#carousel-view').show()
-    $('#carousel-li a').text('My Images')
-    $('#carousel-li').prop('id', 'my-images-li')
-  }
-  store.view = 'carousel'
+  $('#upload-images-page').hide()
+  $('#carousel-view').show()
 }
 
 const deleteImageSuccess = () => {
@@ -213,10 +174,11 @@ const editImageSuccess = () => {
   $("span[data-id='tags-" + store.currentImageID + "']").text(store.recentEditedData.image.tags)
 }
 
-const askUser
-
 module.exports = {
+  populateCarouselSuccess,
   onUploadImageSuccess,
   onUploadImageError,
-  uploadImagesView
+  uploadImagesView,
+  returnToCarouselView,
+  onGetMyImagesSuccess
 }

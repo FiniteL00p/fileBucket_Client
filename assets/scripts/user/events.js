@@ -2,7 +2,6 @@ const getFormFields = require('../../../lib/get-form-fields')
 const api = require('./api')
 const ui = require('./ui')
 const store = require('../store.js')
-const userLocator = require('../geo-locator-api')
 
 const userHandlers = function () {
   $('#edit-pwd-li').on('click', onToggleEditPwdModal)
@@ -29,7 +28,6 @@ const onToggleSignIn = (event) => {
 const onSignIn = function (event) {
   event.preventDefault()
   const data = getFormFields(event.target)
-  console.log(data)
   api.signIn(data)
     .then(ui.onSignInSuccess)
     .catch(ui.onSignUpFailure)

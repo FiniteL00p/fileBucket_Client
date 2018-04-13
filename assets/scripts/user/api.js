@@ -76,11 +76,25 @@ const updateUser = (latitude, longitude, apiResponse) => {
   })
 }
 
+const getUserLocation = function () {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      resolve(position)
+    }, function errorCallback (error) {
+      reject(error)
+    }, {
+      timeout: 8000, // 8 seconds
+      maximumAge: 8640000000
+    })
+  })
+}
+
 module.exports = {
   signIn,
   signUp,
   changePw,
   logOut,
   changePassword,
-  updateUser
+  updateUser,
+  getUserLocation
 }

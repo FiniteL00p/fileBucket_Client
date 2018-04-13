@@ -15,7 +15,7 @@ const imageHandlers = function () {
   $('body').on('click', '.edit-image-button', onToggleEditImageModal)
   $('body').on('submit', '#edit-image-form', onEditImage)
   $('body').on('click', '#upload-image-li', onSelectUploadImagesView)
-  $('body').on('click', '#carousel-li', onReturnToCarouselView)
+  $('body').on('click', '#carousel-link', onReturnToCarouselView)
   $('body').on('click', '#my-images-li', onSelectViewMyImagesView)
   $('body').on('click', '.remove-tag', (event) => {
     $(event.target).parent().remove()
@@ -38,8 +38,9 @@ const onUploadImage = function (event) {
   $('.upload-info').append(imageRow)
   const formData = new FormData(event.target)
   const imageDetails = getFormFields(event.target)
-  formData.append('image[longitude]', store.exifData.longitude)
-  formData.append('image[latitude]', store.exifData.latitude)
+  console.log(store.exifData)
+  formData.append('image[loc][longitude]', store.exifData.longitude)
+  formData.append('image[loc][latitude]', store.exifData.latitude)
   formData.append('image[city]', store.exifData.city)
   formData.append('image[state]', store.exifData.state)
   formData.append('image[country]', store.exifData.country)
@@ -53,16 +54,16 @@ const onSelectCarousel = (event) => {
   $('#comments-wrapper').empty()
   store.currentImageID = $(event.target).data().id
   $('#single-image-readout-modal').modal('show')
-  api.findImageById()
+  api.getImagesByDistance()
     .then(ui.populateCarouselModalSuccess)
     .catch(ui.populateCarouselModalFailure)
 }
 
 const onReturnToCarouselView = (event) => {
   event.preventDefault()
-  ui.returnToCarouselView()
-  // emptying my images view so it doesn't duplicate on return to my images
-  $('#my-images-readout-wrapper').empty()
+  api.getImagesByDistance()
+    .then(ui.populateCarouselModalSuccess)
+    .catch(ui.populateCarouselModalFailure)
 }
 
 const onDeleteImage = (event) => {
@@ -102,8 +103,8 @@ const onSelectUploadImagesView = (event) => {
 const onSelectViewMyImagesView = (event) => {
   event.preventDefault()
   api.getImages()
-    .then(ui.myImagesView)
-    .catch(ui.myImagesViewFailure)
+    .then(ui.onGetMyImagesSuccess)
+    .catch(ui.onGetMyImagesFailure)
 }
 
 module.exports = {

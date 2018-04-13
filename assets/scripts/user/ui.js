@@ -1,13 +1,32 @@
 const notification = require('../../../lib/notifications')
 const store = require('../store.js')
 const templateMyImages = require('../templates/my-images-readout.handlebars')
-const templateCarouselFirstImage = require('../templates/carousel-readout-first-image.handlebars')
-const templateCarousel = require('../templates/carousel-readout.handlebars')
 const geolib = require('geolib')
+const api = require('./api')
+const imagesApi = require('../images/api')
+const imagesUi = require('../images/ui')
 
 const onSignInSuccess = function (apiResponse) {
   store.user = apiResponse.user
+  api.getUserLocation()
+  .then((location) => {
+    console.log(location)
+    store.user.latitude = location.coords.latitude
+    store.user.longitude = location.coords.longitude
+    console.log(store.user)
+  })
+  .then(() => {
+    imagesApi.getImagesByDistance()
+    .then(imagesUi.populateCarouselSuccess)
+  })
+  .catch(() => {
+    getUserLocationTimeout()
+    imagesApi.getImages()
+    .then(imagesUi.populateCarouselSuccess)
+  })
   notification.staticToast('success', 'Success!', 'Successfully signed in!', '#1F888F')
+  const loginForm = document.getElementById('login-form')
+  loginForm.reset()
   // change placeholder in dropdown label to user email
   $('#user-email-dropdown').text(store.user.email)
   // making sure appropriate views/nav options are active
@@ -17,12 +36,6 @@ const onSignInSuccess = function (apiResponse) {
   $('#upload-images-page').hide()
   $('#carousel-view').show()
   $('#static-nav').show()
-  // clearing sign in form on sign in success
-  $('#login-form').each(function () {
-    this.reset()
-  })
-  // storing view location to inform dom manipulation (e.g., nav button options)
-  store.view = 'carousel'
 }
 
 const onSignInFailure = function (error) {
@@ -56,19 +69,6 @@ const onSignUpFailure = function () {
 }
 
 const onLogOutSuccess = () => {
-  if (store.view === 'upload images') {
-    $('#upload-images-page').hide()
-    $('#carousel-li a').text('Upload Image')
-    $('#carousel-li').prop('id', 'upload-image-li')
-  }
-  if (store.view === 'my images') {
-    $('#my-images-page').hide()
-    $('#carousel-li a').text('My Images')
-    $('#carousel-li').prop('id', 'my-images-li')
-  }
-  if (store.view === 'carousel') {
-    $('#carousel-view').hide()
-  }
   notification.alert('success', 'Successfully Logged Out')
   $('#static-nav').hide()
   $('#footer').hide()
@@ -106,7 +106,7 @@ const noGeoTracking = () => {
   notification.staticToast('error', 'Sorry!', 'This app requires the use of location tracking. Please allow location tracking in order to proceed. If you already rejected our tracking request, you will need to reset that decision in your browser settings.', 'red')
 }
 
-const timeOutMessage = () => {
+const getUserLocationTimeout = () => {
   notification.staticToast('info', 'Location Tracker Timed-Out!', 'Geolocation was taking too long. To avoid excessive wait times, we\'re populating your carousel with images from around the world (instead of your local community).', '#1F888F')
   $('#carousel-header').text('Public Images')
 }
@@ -120,6 +120,5 @@ module.exports = {
   onLogOutFailure,
   onChangePwdSuccess,
   onChangePwdFailure,
-  noGeoTracking,
-  timeOutMessage,
+  noGeoTracking
 }
