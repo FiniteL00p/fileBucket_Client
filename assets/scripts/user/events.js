@@ -27,6 +27,8 @@ const onToggleSignIn = (event) => {
 
 const onSignIn = function (event) {
   event.preventDefault()
+  // show spinner
+  $('#spinner').fadeIn()
   const data = getFormFields(event.target)
   api.signIn(data)
     .then(ui.onSignInSuccess)
@@ -43,6 +45,8 @@ const onSignUp = (event) => {
 
 const onLogOut = (event) => {
   event.preventDefault()
+  // hide spinner so it won't show on return to landing page
+  $('#spinner').hide()
   api.logOut()
     .then(ui.onLogOutSuccess)
     .catch(ui.onLogOutFailure)
