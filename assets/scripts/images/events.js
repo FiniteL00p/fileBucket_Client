@@ -6,14 +6,27 @@ const api = require('./api')
 const getExifData = require('../../../lib/get-exif-data')
 const store = require('../store')
 
-const imagesHandlers = function () {
+const imageHandlers = function () {
   $('#add-tag-btn').on('click', ui.addTag)
   $('#image-upload-form').on('submit', onUploadImage)
   $('#upload-btn').on('change', getExifData)
+  $('body').on('click', '.delete-image-button', onDeleteImage)
+  $('body').on('click', '.carousel-img-handler-class', onSelectCarousel)
+  $('body').on('click', '.edit-image-button', onToggleEditImageModal)
+  $('body').on('submit', '#edit-image-form', onEditImage)
+  $('body').on('click', '#upload-image-li', onSelectUploadImagesView)
+  $('body').on('click', '#carousel-link', onReturnToCarouselView)
+  $('body').on('click', '#my-images-li', onSelectViewMyImagesView)
+  $('body').on('click', '#map-link', onSelectMap)
   $('body').on('click', '.remove-tag', (event) => {
     $(event.target).parent().remove()
     $(event.target).parent().parent().siblings().remove()
   })
+}
+
+const onSelectMap = function() {
+  api.getImages()
+  .then(ui.onGetImagesForMap)
 }
 
 const onUploadImage = function (event) {
@@ -31,8 +44,9 @@ const onUploadImage = function (event) {
   $('.upload-info').append(imageRow)
   const formData = new FormData(event.target)
   const imageDetails = getFormFields(event.target)
-  formData.append('image[longitude]', store.exifData.longitude)
-  formData.append('image[latitude]', store.exifData.latitude)
+  console.log(store.exifData)
+  formData.append('image[loc][longitude]', store.exifData.longitude)
+  formData.append('image[loc][latitude]', store.exifData.latitude)
   formData.append('image[city]', store.exifData.city)
   formData.append('image[state]', store.exifData.state)
   formData.append('image[country]', store.exifData.country)
@@ -41,6 +55,64 @@ const onUploadImage = function (event) {
     .catch(ui.onUploadImageError)
 }
 
+const onSelectCarousel = (event) => {
+  event.preventDefault()
+  $('#comments-wrapper').empty()
+  store.currentImageID = $(event.target).data().id
+  $('#single-image-readout-modal').modal('show')
+  api.getImagesByDistance()
+    .then(ui.populateCarouselModalSuccess)
+    .catch(ui.populateCarouselModalFailure)
+}
+
+const onReturnToCarouselView = (event) => {
+  event.preventDefault()
+  api.getImagesByDistance()
+    .then(ui.populateCarouselModalSuccess)
+    .catch(ui.populateCarouselModalFailure)
+}
+
+const onDeleteImage = (event) => {
+  event.preventDefault()
+  // we set the "delete" data property of the delete button to image ID so we
+  // could access it from the event and use to AJAX/DOM delete
+  store.currentImageID = $(event.target).data().delete
+  api.deleteImage()
+    .then(ui.deleteImageSuccess)
+    .catch(ui.deleteImageFailure)
+}
+
+const onToggleEditImageModal = (event) => {
+  event.preventDefault()
+  store.currentImageID = $(event.target).data().edit
+  api.findImageById()
+    .then(ui.toggleEditImageModalSuccess)
+    .catch(ui.toggleEditImageModalFailure)
+}
+
+const onEditImage = (event) => {
+  event.preventDefault()
+  const editImageData = getFormFields(event.target)
+  store.recentEditedData = editImageData
+  api.editImage(editImageData)
+    .then(ui.editImageSuccess)
+    .catch(ui.editImageFailure)
+}
+
+const onSelectUploadImagesView = (event) => {
+  event.preventDefault()
+  ui.uploadImagesView()
+  // emptying my images view so it doesn't duplicate on return to my images
+  $('#my-images-readout-wrapper').empty()
+}
+
+const onSelectViewMyImagesView = (event) => {
+  event.preventDefault()
+  api.getImages()
+    .then(ui.onGetMyImagesSuccess)
+    .catch(ui.onGetMyImagesFailure)
+}
+
 module.exports = {
-  imagesHandlers
+  imageHandlers
 }

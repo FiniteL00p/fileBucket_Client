@@ -57,63 +57,6 @@ const changePassword = (editPwdData) => {
   })
 }
 
-const getImages = () => {
-  return $.ajax({
-    url: apiUrl + '/images',
-    method: 'GET',
-    headers: {
-      contentType: 'application/json',
-      Authorization: 'Token token=' + store.user.token
-    }
-  })
-}
-
-const findByDistance = () => {
-  return $.ajax({
-    url: apiUrl + '/findbydistance',
-    // ?latitude=' + store.user.latitude + '?longitude=' + store.user.longitude,
-    method: 'GET',
-    headers: {
-      contentType: 'application/json',
-      Authorization: 'Token token=' + store.user.token
-    }
-  })
-}
-
-const deleteImage = () => {
-  return $.ajax({
-    url: apiUrl + '/images/' + store.currentImageID,
-    method: 'DELETE',
-    headers: {
-      contentType: 'application/json',
-      Authorization: 'Token token=' + store.user.token
-    }
-  })
-}
-
-const findImageById = () => {
-  return $.ajax({
-    url: apiUrl + '/images/' + store.currentImageID,
-    method: 'GET',
-    headers: {
-      contentType: 'application/json',
-      Authorization: 'Token token=' + store.user.token
-    }
-  })
-}
-
-const editImage = (editImgData) => {
-  return $.ajax({
-    url: apiUrl + '/images/' + store.currentImageID,
-    method: 'PATCH',
-    headers: {
-      contentType: 'application/json',
-      Authorization: 'Token token=' + store.user.token
-    },
-    data: editImgData
-  })
-}
-
 const updateUser = (latitude, longitude, apiResponse) => {
   store.user.latitude = latitude
   store.user.longitude = longitude
@@ -122,7 +65,7 @@ const updateUser = (latitude, longitude, apiResponse) => {
     method: 'PATCH',
     headers: {
       contentType: 'application/json',
-      Authorization: 'Token token=' + apiResponse.user.token
+      Authorization: 'Token token=' + store.user.token
     },
     data: {
       'user': {
@@ -133,27 +76,16 @@ const updateUser = (latitude, longitude, apiResponse) => {
   })
 }
 
-const createComment = (packagedData) => {
-  return $.ajax({
-    url: apiUrl + '/add-comment/' + store.currentImageID,
-    method: 'PATCH',
-    headers: {
-      contentType: 'application/json',
-      Authorization: 'Token token=' + store.user.token
-    },
-    data: packagedData
-  })
-}
-
-const editComment = (packagedData) => {
-  return $.ajax({
-    url: apiUrl + '/edit-comment/' + store.currentImageID,
-    method: 'PATCH',
-    headers: {
-      contentType: 'application/json',
-      Authorization: 'Token token=' + store.user.token
-    },
-    data: packagedData
+const getUserLocation = function () {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      resolve(position)
+    }, function errorCallback (error) {
+      reject(error)
+    }, {
+      timeout: 8000, // 8 seconds
+      maximumAge: 8640000000
+    })
   })
 }
 
@@ -163,12 +95,6 @@ module.exports = {
   changePw,
   logOut,
   changePassword,
-  getImages,
-  deleteImage,
-  findImageById,
-  editImage,
   updateUser,
-  findByDistance,
-  createComment,
-  editComment
+  getUserLocation
 }
