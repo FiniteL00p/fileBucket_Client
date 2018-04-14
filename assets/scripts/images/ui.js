@@ -74,10 +74,10 @@ const populateCarouselSuccess = (data) => {
 }
 
 const onGetMyImagesSuccess = (response) => {
-  console.log(response);
   $('#upload-images-page').hide()
   $('#carousel-view').hide()
   $('#my-images-page').show()
+  $('#map-view').hide()
   $('#my-images-readout-wrapper').empty()
   // populate images - START
   // filtering API response for user-owned images
@@ -147,6 +147,55 @@ const populateCarouselModalSuccess = (apiResponse) => {
   }
 }
 
+const onGetImagesForMap = function (data) {
+  $('#upload-images-page').hide()
+  $('#carousel-view').hide()
+  $('#my-images-page').hide()
+  $('#map-view').show()
+  let userLocation
+  if(store.user.latitude && store.user.latitude) {
+    userLocation = {lat: store.user.latitude, lng: store.user.longitude}
+  }
+  else {
+    userLocation = {lat: 42.360082, lng: -71.058880}
+  }
+  console.log(userLocation)
+  const map = new google.maps.Map(document.getElementById('map'), {
+    center: userLocation,
+    zoom: 8
+  });
+
+  data.images.forEach(function(image){
+    console.log(image)
+
+    const imageLatLng = {lat: image.loc[1], lng: image.loc[0]}
+
+    const contentString = '<div id="content">'+
+      '<h4>Title: </h4>' + image.title + '<br>' +
+      '<h4> Description: </h4>' + image.description + '<br>' +
+      '<h4> Latitude:</h4> ' + image.loc[1] + '<br>' +
+      '<h4>Longitude:</h4>' + image.loc[0] + '<br>' +
+    '</div>';
+
+    const infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+
+    const marker = new google.maps.Marker({
+      map: map,
+      position: imageLatLng,
+      icon: {
+        url: image.url,
+        scaledSize: new google.maps.Size(30, 30)
+      }
+    });
+
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+  })
+}
+
 const populateCarouselModalFailure = (apiResponse) => {
   notification.universalToast('error', 'Error!', 'Failed to populate modal!')
 }
@@ -180,5 +229,6 @@ module.exports = {
   onUploadImageError,
   uploadImagesView,
   returnToCarouselView,
-  onGetMyImagesSuccess
+  onGetMyImagesSuccess,
+  onGetImagesForMap
 }

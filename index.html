@@ -18,6 +18,7 @@
       <!-- Scripts -->
       <script src="public/vendor.js" type="text/javascript" charset="utf-8" defer></script>
       <script src="public/application.js" type="text/javascript" charset="utf-8" defer></script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwTzHKLv4l8r4evBdNaNdSKO-ytItd5eA&callback=initMap" async defer></script>
     </head>
 
     <body>
@@ -74,6 +75,7 @@
                    <li class="carousel-link" id="carousel-link"><a href="#">Show Carousel</a></li>
                    <li class="upload-image-li" id="upload-image-li"><a href="#">Upload Image</a></li>
                    <li class="my-images-li" id="my-images-li"><a href="#">My Images</a></li>
+                   <li class="my-images-li" id="map-link"><a href="#">Map</a></li>
                    <li class="sign-out-li" id="sign-out-li"><a href="#">Sign Out</a></li>
                  </ul>
                </li>
@@ -83,7 +85,9 @@
         </nav>
       </div>
       <!-- Nav - End -->
-
+      <div id="map-view">
+        <div id="map"></div>
+      </div>
       <!-- Carousel Page - Start -->
       <div id="carousel-view" class="carousel-view">
         <div class="loader-wrapper">

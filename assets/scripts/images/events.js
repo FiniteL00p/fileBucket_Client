@@ -17,10 +17,16 @@ const imageHandlers = function () {
   $('body').on('click', '#upload-image-li', onSelectUploadImagesView)
   $('body').on('click', '#carousel-link', onReturnToCarouselView)
   $('body').on('click', '#my-images-li', onSelectViewMyImagesView)
+  $('body').on('click', '#map-link', onSelectMap)
   $('body').on('click', '.remove-tag', (event) => {
     $(event.target).parent().remove()
     $(event.target).parent().parent().siblings().remove()
   })
+}
+
+const onSelectMap = function() {
+  api.getImages()
+  .then(ui.onGetImagesForMap)
 }
 
 const onUploadImage = function (event) {

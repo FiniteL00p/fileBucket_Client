@@ -12,6 +12,15 @@ body {
   font-family: 'Raleway', sans-serif;
 }
 
+#map-view {
+  display: none;
+}
+
+#map {
+  width: 100%;
+  height: 400px;
+}
+
 .loader {
   margin-left: auto;
   margin-right: auto;
