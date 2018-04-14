@@ -18,6 +18,8 @@ const onToggleSignIn = (event) => {
 
 const onSignIn = function (event) {
   event.preventDefault()
+  // show spinner
+  $('#spinner').fadeIn()
   const data = getFormFields(event.target)
   api.signIn(data)
     // passing geo-locator the apiResponse so it can use in its update user requests
@@ -51,6 +53,8 @@ const onSignIn = function (event) {
           .catch(ui.populateCarouselFailure)
         store.view = 'carousel'
       } else {
+        // hide spinner on failed sign in
+        $('#spinner').hide()
         ui.onSignInFailure(error)
       }
     })
@@ -66,6 +70,8 @@ const onSignUp = (event) => {
 
 const onLogOut = (event) => {
   event.preventDefault()
+  // hide spinner so it won't show on return to landing page
+  $('#spinner').hide()
   api.logOut()
     .then(ui.onLogOutSuccess)
     .catch(ui.onLogOutFailure)

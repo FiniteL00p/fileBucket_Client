@@ -8,6 +8,7 @@ $(() => {
   // userLocator.getUserLocation()
   // $('#login').hide()
   // $('#auth-view').hide()
+  $('#spinner').hide()
   $('#footer').hide()
   $('#sign-up').hide()
   $('#carousel-view').hide()
