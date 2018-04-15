@@ -37,6 +37,7 @@ const editImageFailure = () => {
 const uploadImagesView = () => {
   $('#upload-images-page').show()
   $('#carousel-view').hide()
+  $('#map-view').hide()
 }
 
 const populateCarousel = function(data) {
