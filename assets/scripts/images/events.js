@@ -44,7 +44,6 @@ const onUploadImage = function (event) {
   $('.upload-info').append(imageRow)
   const formData = new FormData(event.target)
   const imageDetails = getFormFields(event.target)
-  console.log(store.exifData)
   formData.append('image[loc][longitude]', store.exifData.longitude)
   formData.append('image[loc][latitude]', store.exifData.latitude)
   formData.append('image[city]', store.exifData.city)
@@ -58,18 +57,26 @@ const onUploadImage = function (event) {
 const onSelectCarousel = (event) => {
   event.preventDefault()
   $('#comments-wrapper').empty()
-  store.currentImageID = $(event.target).data().id
+  const imageId = $(event.target).data().id
+  console.log($(event.target).data().id)
   $('#single-image-readout-modal').modal('show')
-  api.getImagesByDistance()
+  api.findImageById(imageId)
     .then(ui.populateCarouselModalSuccess)
     .catch(ui.populateCarouselModalFailure)
 }
 
 const onReturnToCarouselView = (event) => {
   event.preventDefault()
-  api.getImagesByDistance()
-    .then(ui.populateCarouselModalSuccess)
-    .catch(ui.populateCarouselModalFailure)
+  if(store.user.latitude && store.user.longitude) {
+    api.getImagesByDistance()
+      .then(ui.populateCarouselSuccess)
+      .catch(ui.populateCarouselFailure)
+  }
+  else {
+    api.getImages()
+    .then(ui.populateCarouselSuccess)
+    .catch(ui.populateCarouselFailure)
+  }
 }
 
 const onDeleteImage = (event) => {
