@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+      <title>Clique</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- Title icon -->
+      <link rel="shortcut icon" type="image/png" href="https://imgur.com/MTomPU8.png" />
+      <!-- Header fonts -->
+      <link href="https://fonts.googleapis.com/css?family=Bungee+Outline|Fascinate+Inline|Limelight|Monoton|Sacramento|Satisfy" rel="stylesheet">
+      <!-- Body fonts -->
+      <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+      <!-- Carousel modal header fonts -->
+      <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Kaushan+Script|Lobster+Two|Pacifico|Sail|Satisfy|Stalemate|Zilla+Slab+Highlight" rel="stylesheet">
+      <!-- Font-Awesome -->
+      <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
+      <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
+      <!-- Scripts -->
+      <script src="public/vendor.js" type="text/javascript" charset="utf-8" defer></script>
+      <script src="public/application.js" type="text/javascript" charset="utf-8" defer></script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwTzHKLv4l8r4evBdNaNdSKO-ytItd5eA&callback=initMap" async defer></script>
+    </head>
+
+    <body>
+
+      <!-- Landing Page - Start -->
+      <div id="auth-view">
+        <!-- Notification Banner - Start -->
+        <div class="notification-banner"></div>
+        <!-- Notification Banner - End -->
+
+        <!-- Primary Header - Start-->
+        <h1 class="name"> Clique </h1>
+        <!-- Primary Header - End -->
+
+        <!-- Log-in Fields - Start -->
+        <div class="login" id="login">
+          <form id="login-form" class="login-form">
+            <input type="email" class="auth-input auth-email login-element" name="credentials[email]" placeholder="Email">
+            <input type="password" class="auth-input auth-password login-element" name="credentials[password]" placeholder="Password"><br>
+            <input type="submit" class="login-btn login-element" value="LOGIN">
+            <div class="sign-up-toggle login-element" id="sign-up-toggle">Sign up?</div>
+          </form>
+        </div>
+        <!-- Log-in Fields - End -->
+
+        <!-- Sign-Up Fields - Start -->
+        <div class="sign-up" id="sign-up">
+          <form id="sign-up-form" class="sign-up-form">
+            <input type="email" name="credentials[email]" class="auth-input auth-email sign-up-element" value="" placeholder="Email">
+            <input type="password" name="credentials[password]" class="auth-input auth-password sign-up-element" value="" placeholder="Password">
+            <input type="password" name="credentials[password_confirmation]" class="auth-input auth-password-confirmation sign-up-element" value="" placeholder="Password Confirmation"><br>
+            <input type="submit" class="login-btn sign-up-element" value="SIGN UP">
+            <div class="sign-in-toggle sign-up-element" id="sign-in-toggle">Sign in?</div>
+          </form>
+        </div>
+        <!-- Sign-Up Fields - End -->
+
+        <i class="fa fa-cog fa-spin spinner"  id="spinner"></i>
+
+      </div>
+      <!-- Landing Page - End -->
+
+      <!-- Nav - Start -->
+      <div id="static-nav">
+        <nav class="navbar navbar-default static-nav">
+          <div class="container-fluid">
+           <div class="navbar-header">
+             <a class="navbar-brand" href="#">Clique</a>
+           </div>
+           <div id="navbar" class="navbar-collapse collapse">
+             <ul class="nav navbar-nav navbar-right">
+               <li class="dropdown">
+                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="user-email-dropdown">Placeholder</span> <span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                   <li class="edit-pwd-li" id="edit-pwd-li"><a href="#">Edit Password</a></li>
+                   <li class="carousel-link" id="carousel-link"><a href="#">Show Carousel</a></li>
+                   <li class="upload-image-li" id="upload-image-li"><a href="#">Upload Image</a></li>
+                   <li class="my-images-li" id="my-images-li"><a href="#">My Images</a></li>
+                   <li class="my-images-li" id="map-link"><a href="#">Map</a></li>
+                   <li class="sign-out-li" id="sign-out-li"><a href="#">Sign Out</a></li>
+                 </ul>
+               </li>
+             </ul>
+           </div>
+         </div>
+        </nav>
+      </div>
+      <!-- Nav - End -->
+      <div id="map-view">
+        <div id="map"></div>
+      </div>
+      <!-- Carousel Page - Start -->
+      <div id="carousel-view" class="carousel-view">
+        <div class="loader-wrapper">
+          <div class="loader"></div>
+          <p> Please Wait While We Get Your Location </p>
+        </div>
+        <!-- Carousel View Header -->
+        <div class="carousel-header" id="carousel-header">Your Community</div>
+        <!-- Carousel View Header -->
+
+        <!-- Carousel - Start -->
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div id="carousel-example-generic" class="carousel slide" data-interval="false" data-ride="carousel">
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" role="listbox" id="carousel-inner">
+              </div>
+              <!-- Controls -->
+              <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- Carousel - End -->
+
+        <!-- Modal - Single Carousel Image - START -->
+        <div class="modal fade single-image-readout-modal" id="single-image-readout-modal" tabindex="-1">
+          <div class="modal-dialog modal-lg single-image-readout-modal-set-width">
+            <div class="modal-content single-image-readout-modal-content-wrapper">
+              <div class="single-image-readout-modal-content" id="single-image-readout-modal-content">
+                  <div class="single-title" id="single-title">Day at the Beach</div>
+                  <div class="single-image" id="single-image"></div>
+                  <div class="carousel-image-info-wrapper">
+                    <div class="single-location" id="single-location"><span class="city" id="city">City</span>, <span class="state" id="state">State</span></div>
+                    <div class="interim-wrapper">
+                      <div class="single-description" id="single-description"><span class="single-owned-prop">Description:</span> <span id="single-description-span">This is a sample description because this image wasn't uploaded with a description.</span></div>
+                      <div class="single-owner" id="single-owner"><span class="single-owned-prop">Owned by:</span> <span class="single-owned-value" id="single-owned-value"></span></div>
+                      <div class="single-tags" id="single-tags"><span class="single-owned-prop">Tags:</span> <span class="single-tag-value" id="single-tag-value">#sampleTag1 #sampleTag2 #sampleTag3</span></div>
+                    </div>
+                    <!-- submit comment form start -->
+                    <form class="form-horizontal" id="submit-comment-form">
+                      <div class="form-group comments-form">
+                        <div class="col-sm-2">
+                          <button type="submit" class="btn btn-default modal-button comments-button">Add</button>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="input-div col-sm-offset-1 col-sm-9">
+                          <textarea class="form-control" id="inputComments" name="image[comments]" placeholder="New Comment!"></textarea>
+                        </div>
+                      </div>
+                    </form>
+                    <!-- Comments wrapper -->
+                    <div class="comments-wrapper" id="comments-wrapper">
+                    </div>
+                    <!-- Comments wrapper -->
+                  </div>
+                  <!-- This is a hidden template; do not delete! -->
+                  <div class="sample-comment" id="comment-template"><span id="new-comment">This is a sample comment. I think that's a great picture. Awesome job!</span><br /><span class="commentor-1">-</span><span class="commentor-1" id="new-commentor">-ndrew56@gmail.com</span></div>
+                  <!-- Info wrapper end -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal - Single Carousel Image - END -->
+
+        </div>
+      </div>
+      <!-- Carousel Page - End -->
+
+      <!-- Upload Image Page - Start -->
+      <!-- bootstrap form -->
+      <div class="upload-images-page-wrapper" id="upload-images-page">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-6">
+                <form id="image-upload-form" enctype="multipart/form-data">
+                  <div class="form-group image-details-group">
+                    <input type="text" class="image-details-input" name="image[title]" placeholder="Title" required>
+                  </div>
+                  <div class="form-group image-details-group">
+                    <input type="text" class="image-details-input" name="image[description]" placeholder="Description" required>
+                  </div>
+                  <input type="file" id="upload-btn" name="image[file]" required>
+                  <input type="submit" class="image-uploader-btn"> <br> <br>
+                  <span> Add Tag </span><i class="fas fa-plus add-tag-btn" id="add-tag-btn"></i> <br><br>
+                </form>
+            </div>
+            <div class="col-md-6">
+              <div class="row">
+                <div class="col-md-12 upload-info">
+                  <div class="row headers">
+                    <div class="col-md-2">
+                      <span> Preview </span>
+                    </div>
+                    <div class="col-md-3">
+                      <span> Filename </span>
+                    </div>
+                    <div class="col-md-2">
+                      <span> Filesize </span>
+                    </div>
+                    <div class="col-md-2">
+                      <span> Filetype </span>
+                    </div>
+                    <div class="col-md-3">
+                      <span> Status </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      </div>
+      <!-- Bootstrap form ends -->
+      <!-- Upload Image Page - End -->
+
+      <!-- My Images Page - Start -->
+      <div class="my-images-page-wrapper" id="my-images-page">
+
+        <!-- My Images Header -->
+        <div class="my-images-header" id="my-images-header">My Images</div>
+        <!-- My Images Header -->
+
+        <!-- My Images Readout Wrapper -->
+        <div class="my-images-readout-wrapper clearfix" id="my-images-readout-wrapper"></div>
+        <!-- My Images Readout Wrapper -->
+
+      </div>
+      <!-- My Images Page - End -->
+
+      <!-- Change Password Modal - Start -->
+      <div class="modal fade" id="change-pw-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content change-pw-modal-content" id="change-pw-modal-content">
+            <div>
+              <button type="button" class="close-modal" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div class="space-div"></div>
+            <!-- start form for change pw modal-->
+            <form class="form-horizontal" id="change-pw-form">
+              <div class="form-group">
+                <label for="inputPassword1" class="col-sm-2 control-label current-label">Current Password</label>
+                <div class="input-div col-sm-10">
+                  <input type="password" class="form-control" id="inputPassword1" name="passwords[old]" placeholder="Current Password">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputPassword2" class="col-sm-2 control-label new-label">New Password</label>
+                <div class="input-div col-sm-10">
+                  <input type="password" class="form-control" id="inputPassword2" name="passwords[new]" placeholder="New Password">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" class="btn btn-default modal-button">Change Password!</button>
+                </div>
+              </div>
+            </form>
+            <!-- end form for change pw modal-->
+          </div>
+        </div>
+      </div>
+      <!-- Change Password Modal - End -->
+
+      <!-- Edit Image Modal - Start -->
+      <div class="modal fade" id="edit-image-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content edit-image-modal-content" id="edit-image-modal-content">
+            <div class="edit-image-modal-banner"></div>
+            <!-- start form for Edit Image modal-->
+            <form class="form-horizontal" id="edit-image-form">
+              <div class="form-group">
+                <label for="title1" class="col-sm-2 control-label title-label">Title</label>
+                <div class="input-div col-sm-10">
+                  <input type="text" class="form-control" id="title1" name="image[title]" placeholder="Title">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="description2" class="col-sm-2 control-label description-label">Description</label>
+                <div class="input-div col-sm-10">
+                  <!-- <input type="text" class="form-control" id="description1" name="image[description]" placeholder="Tell your community a bit about your picture!"> -->
+                  <textarea class="form-control" id="description2" name="image[description]" placeholder="Tell your community a bit about your picture!"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="tags1" class="col-sm-2 control-label tags-label">Tags</label>
+                <div class="input-div col-sm-10">
+                  <input type="text" class="form-control" id="tags1" name="image[tags]" placeholder="E.g., #beach #summertime #relaxing">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" class="btn btn-default modal-button">Edit Image</button>
+                </div>
+              </div>
+            </form>
+            <!-- end form for Edit Image modal-->
+          </div>
+        </div>
+      </div>
+      <!-- Edit Image Modal - End -->
+
+      <!-- Edit Comment Modal - Start -->
+      <div class="modal fade" id="edit-comment-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content edit-image-modal-content" id="edit-comment-modal-content">
+            <div class="edit-image-modal-banner"></div>
+            <!-- start form for Edit Image modal-->
+            <form class="form-horizontal edit-comment-form" id="edit-comment-form">
+              <div class="form-group">
+                <label for="descr3" class="col-sm-2 control-label description-label">Comment</label>
+                <div class="input-div col-sm-10">
+                  <!-- <input type="text" class="form-control" id="description1" name="image[description]" placeholder="Tell your community a bit about your picture!"> -->
+                  <textarea class="form-control" id="descr3" name="image[updatedComment]" placeholder="Like a picture? Let the owner know!"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" class="btn btn-default modal-button">Edit</button>
+                </div>
+              </div>
+            </form>
+            <!-- end form for Edit Image modal-->
+          </div>
+        </div>
+      </div>
+      <!-- Edit Comment Modal - End -->
+
+      <footer id="footer"></footer>
+
+    </body>
+</html>
