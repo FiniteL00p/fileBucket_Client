@@ -39,16 +39,10 @@ const onSignInSuccess = function (apiResponse) {
 }
 
 const onSignInFailure = function (error) {
-  $('#login-form').each(function () {
-    this.reset()
-  })
-  if (error.code === 1) {
-    // user rejects geo locator
-    notification.staticToast('error', 'Sorry!', 'This app requires the use of location tracking. Please allow location tracking in order to proceed. If you already rejected our tracking request, you will need to reset that decision in your browser settings.', 'red')
-  } else {
-    // wrong password, etc.
-    notification.alert('danger', 'Login Unsuccessful. Please make sure you used the correct password!')
-  }
+  const loginForm = document.getElementById('login-form')
+  loginForm.reset()
+  console.log('running')
+  notification.alert('danger', 'Login Unsuccessful. Please make sure you used the correct password!')
 }
 
 const onSignUpSuccess = function () {
