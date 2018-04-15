@@ -37,6 +37,7 @@ const editImageFailure = () => {
 const uploadImagesView = () => {
   $('#upload-images-page').show()
   $('#carousel-view').hide()
+  $('#map-view').hide()
 }
 
 const populateCarousel = function(data) {
@@ -46,13 +47,16 @@ const populateCarousel = function(data) {
 }
 
 const populateCarouselSuccess = (data) => {
+  const nonUserImages = data.images.filter(function (image) {
+    return image._owner.email !== store.user.email
+  })
+  console.log("non user images", nonUserImages)
   console.log(data)
   $('#carousel-inner').empty()
   $('.loader-wrapper').hide()
   $('#my-images-page').hide()
   console.log(store.user)
-  console.log(data.images.length)
-  if(data.images.length < 1) {
+  if(nonUserImages.length < 1) {
     console.log('first if ran')
     api.getImages()
     .then((data) => {

@@ -27,12 +27,10 @@ const onToggleSignIn = (event) => {
 
 const onSignIn = function (event) {
   event.preventDefault()
-  // show spinner
-  $('#spinner').fadeIn()
   const data = getFormFields(event.target)
   api.signIn(data)
     .then(ui.onSignInSuccess)
-    .catch(ui.onSignUpFailure)
+    .catch(ui.onSignInFailure)
 }
 
 const onSignUp = (event) => {
