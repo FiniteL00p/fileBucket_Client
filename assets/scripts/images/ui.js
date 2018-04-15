@@ -50,23 +50,20 @@ const populateCarouselSuccess = (data) => {
   const nonUserImages = data.images.filter(function (image) {
     return image._owner.email !== store.user.email
   })
-  console.log("non user images", nonUserImages)
-  console.log(data)
+  $('#carousel-view').show()
+  $('#map-view').hide()
+  $('#upload-images-page').hide()
   $('#carousel-inner').empty()
   $('.loader-wrapper').hide()
   $('#my-images-page').hide()
-  console.log(store.user)
   if(nonUserImages.length < 1) {
-    console.log('first if ran')
     api.getImages()
     .then((data) => {
       if(data > 1) {
-        console.log('second if ran')
         $('#carousel-example-generic').show()
         populateCarousel(data)
       }
       else {
-        console.log('ran')
         $('#carousel-view').append('Sorry No Images Uploaded Yet')
       }
     })
@@ -124,6 +121,7 @@ const populateCarouselFailure = () => {
 }
 
 const populateCarouselModalSuccess = (apiResponse) => {
+  console.log(apiResponse)
   $('#city').text(apiResponse.image.city)
   $('#state').text(apiResponse.image.state)
   $('#single-title').text(apiResponse.image.title)
@@ -163,15 +161,12 @@ const onGetImagesForMap = function (data) {
   else {
     userLocation = {lat: 42.360082, lng: -71.058880}
   }
-  console.log(userLocation)
   const map = new google.maps.Map(document.getElementById('map'), {
     center: userLocation,
     zoom: 8
   });
 
   data.images.forEach(function(image){
-    console.log(image)
-
     const imageLatLng = {lat: image.loc[1], lng: image.loc[0]}
 
     const contentString = '<div id="content">'+
@@ -229,6 +224,7 @@ const editImageSuccess = () => {
 
 module.exports = {
   populateCarouselSuccess,
+  populateCarouselModalSuccess,
   onUploadImageSuccess,
   onUploadImageError,
   uploadImagesView,

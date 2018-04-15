@@ -47,9 +47,9 @@ const deleteImage = () => {
   })
 }
 
-const findImageById = () => {
+const findImageById = (id) => {
   return $.ajax({
-    url: apiUrl + '/images/' + store.currentImageID,
+    url: apiUrl + '/images/' + id,
     method: 'GET',
   })
 }
