@@ -43,8 +43,6 @@ const onSignUp = (event) => {
 
 const onLogOut = (event) => {
   event.preventDefault()
-  // hide spinner so it won't show on return to landing page
-  $('#spinner').hide()
   api.logOut()
     .then(ui.onLogOutSuccess)
     .catch(ui.onLogOutFailure)
